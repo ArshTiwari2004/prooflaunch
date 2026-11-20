@@ -4,7 +4,6 @@
 
 # ProofLaunch
 
-**Votes are cheap. Proof isn't.**
 A product-launch platform that ranks products by *verified usage*, not hype.
 
 </div>
@@ -26,14 +25,12 @@ A product-launch platform that ranks products by *verified usage*, not hype.
 12. [Security](#security)
 13. [Observability](#observability)
 14. [Testing](#testing)
-15. [Project structure](#project-structure)
-16. [Honest limitations and roadmap](#honest-limitations-and-roadmap)
 
 ---
 
 ## Why ProofLaunch
 
-Launch boards (Product Hunt, Fazier, ProductsFarm, Peerlist and others) all rank on **upvotes**, and upvotes are the cheapest signal on the internet: easy to trade, easy to farm, and unrelated to whether anyone used the product. On top of that, paid/promoted shelves and paid dofollow links make the board feel pay-to-play.
+Launch boards (Product Hunt, Fazier, Peerlist and others) all rank on **upvotes**, and upvotes are the cheapest signal on the internet: easy to trade, easy to farm, and unrelated to whether anyone used the product. On top of that, paid/promoted shelves and paid dofollow links make the board feel pay-to-play.
 
 ProofLaunch fixes the incentive: **a product climbs by getting real people to try it and say something honest.**
 
@@ -65,10 +62,6 @@ ProofLaunch fixes the incentive: **a product climbs by getting real people to tr
 - Accessibility: skip link, semantic landmarks, labelled controls, visible focus styles, reduced-motion support
 - Auth with BCrypt + JWT, stored in an **httpOnly cookie** (never visible to JavaScript)
 - Rate limiting on auth endpoints, URL safety rules, duplicate-product detection, per-day launch cap
-
-## Design system
-
-Light only, on purpose: a launch directory reads best on a calm, bright canvas. The whole interface follows one lowercase voice, a warm neutral palette with a single deep-green brand colour, an 8px spacing rhythm, Inter for text and Instrument Serif italics for accent words, inline svg icons (no emoji), visible focus rings, and 44px-class touch targets. No dark mode.
 
 ## The Proof Score
 
@@ -218,26 +211,6 @@ cd frontend && npm run typecheck && npm run lint
 
 The business rules (trust weight, score formula, try timing, URL safety, slugs, maker verification, periods) are framework-free and covered in `DomainRulesTest`.
 
-## Project structure
-
-```
-prooflaunch/
-├── backend/                      Spring Boot API (Maven)
-│   └── src/main/java/com/prooflaunch/
-│       ├── domain/               pure rules: score, trust, timing, URL, slugs
-│       ├── engagement/           votes + verified tries + score recompute
-│       ├── product/              leaderboard, CRUD, mapper
-│       ├── user/  category/      auth + reference data
-│       ├── security/  config/    JWT, filters, rate limit, beans
-│       ├── common/  observability/
-│       └── demo/                 demo data (profile "demo")
-├── frontend/                     Next.js 14 (App Router, TypeScript)
-│   ├── app/                      landing, launches, pricing, product, dashboard, /bff + /badge routes
-│   ├── components/  lib/
-├── docker-compose.yml  .env.example
-└── docs/launch-image.png
-```
-
 ## Pricing model
 
 | | free | pro (early access) |
@@ -249,18 +222,3 @@ prooflaunch/
 | ranking boost | none | none |
 
 Other launch boards sell homepage slots and guaranteed dofollow links for one-time fees (commonly $12 to $99). That is pay-to-rank, which contradicts our core promise, so pro sells **tools** only. Pro is not billed yet: the pricing page collects waitlist emails through `POST /api/waitlist`.
-
-## Honest limitations and roadmap
-
-- A "try" proves *intent plus effort*, not that the user truly used the product on a third-party site. We raise the cost of cheating; we don't claim to eliminate it. Roadmap: optional maker SDK/webhook to confirm real sessions.
-- Rate limiter is in-memory (single instance). Move to Redis/Bucket4j when scaling out.
-- Pro billing (Stripe) and the pro features themselves are not built yet; only the waitlist exists.
-- Email verification, password reset, OAuth sign-in, comment replies, notifications and moderation tooling are not built yet.
-- Search is `LIKE`-based; add PostgreSQL `pg_trgm`/full-text search at scale.
-- Integration tests with Testcontainers (Postgres) are the next step beyond the unit tests.
-- Pages are server-rendered per request; add a CDN + short-TTL caching for anonymous traffic as load grows.
-
-## License
-
-MIT. Add a `LICENSE` file before publishing.
-# prooflaunch

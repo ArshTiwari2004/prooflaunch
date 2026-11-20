@@ -87,11 +87,11 @@ All of this lives in pure, unit-tested classes: [`domain/`](backend/src/main/jav
 
 ```mermaid
 flowchart LR
-  B[Browser] -->|HTML (SSR) + /bff calls| W[Next.js 14<br/>App Router]
-  W -->|Bearer JWT from httpOnly cookie| A[Spring Boot 3 API]
-  A -->|JPA / Hibernate| D[(PostgreSQL 16)]
-  A -.->|Flyway migrations| D
-  P[Prometheus] -.->|:8081 /actuator/prometheus| A
+    B["Browser"] -->|"HTML SSR and BFF calls"| W["Next.js 14 App Router"]
+    W -->|"Bearer JWT from httpOnly cookie"| A["Spring Boot 3 API"]
+    A -->|"JPA / Hibernate"| D[("PostgreSQL 16")]
+    A -.->|"Flyway migrations"| D
+    P["Prometheus"] -.->|":8081 actuator/prometheus"| A
 ```
 
 - **Browser never talks to the API directly.** Pages are rendered on the server; interactive actions go through the same-origin `/bff/*` proxy, which attaches the JWT from an httpOnly cookie. No tokens in `localStorage`, no CORS in production.
